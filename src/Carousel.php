@@ -5,7 +5,7 @@
  * @license http://opensource.org/licenses/BSD-3-Clause
  */
 
-namespace dosamigos\gallery;
+namespace xplosn\gallery;
 
 use yii\helpers\Html;
 use yii\helpers\Json;
