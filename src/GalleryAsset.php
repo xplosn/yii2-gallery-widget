@@ -1,29 +1,35 @@
 <?php
 /**
- * @link https://github.com/2amigos/yii2-gallery-widget
- * @copyright Copyright (c) 2013-2016 2amigOS! Consulting Group LLC
- * @license http://opensource.org/licenses/BSD-3-Clause
+ * @copyright Copyright (c) 2013 2amigOS! Consulting Group LLC
+ * @link http://2amigos.us
+ * @license http://www.opensource.org/licenses/bsd-license.php New BSD License
  */
-
-namespace xplosn\gallery;
+namespace dosamigos\gallery;
 
 use yii\web\AssetBundle;
 
 /**
  * GalleryAsset
  *
- * @author Alexander Kochetov <creocoder@gmail.com>
+ * @author Antonio Ramirez <amigo.cobos@gmail.com>
+ * @link http://www.ramirezcobos.com/
+ * @link http://www.2amigos.us/
+ * @package dosamigos\gallery
  */
 class GalleryAsset extends AssetBundle
 {
-    public $sourcePath = '@bower/blueimp-gallery';
+    public $sourcePath = '@vendor/2amigos/yii2-gallery-widget/assets/';
+
     public $css = [
-        'css/blueimp-gallery.min.css',
+        'vendor/css/blueimp-gallery.min.css'
     ];
+
     public $js = [
-        'js/blueimp-gallery.min.js',
+        'vendor/js/blueimp-gallery.min.js',
+        'dosamigos-blueimp-gallery.js'
     ];
+
     public $depends = [
         'yii\web\JqueryAsset',
     ];
-}
+} 
