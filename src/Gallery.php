@@ -1,8 +1,9 @@
 <?php
+
 /**
- * @link https://github.com/2amigos/yii2-gallery-widget
- * @copyright Copyright (c) 2013-2016 2amigOS! Consulting Group LLC
- * @license http://opensource.org/licenses/BSD-3-Clause
+ * @copyright Copyright (c) 2013 2amigOS! Consulting Group LLC
+ * @link http://2amigos.us
+ * @license http://www.opensource.org/licenses/bsd-license.php New BSD License
  */
 
 namespace xplosn\gallery;
@@ -16,10 +17,15 @@ use yii\web\JsExpression;
 /**
  * Gallery renders a BlueImp Gallery items
  *
- * @author Alexander Kochetov <creocoder@gmail.com>
+ * @author Antonio Ramirez <amigo.cobos@gmail.com>
+ * @link http://www.ramirezcobos.com/
+ * @link http://www.2amigos.us/
+ * @package xplosn\gallery
  */
 class Gallery extends Widget
 {
+    public $orientationBreakLine = false;
+    public $lastOrientation = null;
     /**
      * @var array the HTML attributes for the links container tag.
      * @see \yii\helpers\Html::renderTagAttributes() for details on how attributes are being rendered.
@@ -48,7 +54,6 @@ class Gallery extends Widget
      * - src: string, the image to display
      * - url: string, the image to display on the lightbox. If none found, will display `src`
      * - options: HTML attributes of the link
-     * - imageOptions: HTML attributes of the image to be displayed
      */
     public $items = array();
     /**
@@ -71,8 +76,8 @@ class Gallery extends Widget
             Html::addCssClass($this->templateOptions, 'blueimp-gallery-controls');
         }
 
-        foreach($this->clientEvents as $key => $event) {
-            if(!($event instanceof JsExpression)) {
+        foreach ($this->clientEvents as $key => $event) {
+            if (!($event instanceof JsExpression)) {
                 $this->clientOptions[$key] = new JsExpression($event);
             }
         }
@@ -97,6 +102,7 @@ class Gallery extends Widget
     public function renderItems()
     {
         $items = [];
+
         foreach ($this->items as $item) {
             $items[] = $this->renderItem($item);
         }
@@ -118,10 +124,17 @@ class Gallery extends Widget
         }
         $url = ArrayHelper::getValue($item, 'url', $src);
         $options = ArrayHelper::getValue($item, 'options', []);
-        $imageOptions = ArrayHelper::getValue($item, 'imageOptions', []);
         Html::addCssClass($options, 'gallery-item');
 
-        return Html::a(Html::img($src, $imageOptions), $url, $options);
+        if ($this->orientationBreakLine) {
+            if (is_null($this->lastOrientation)) {
+                $this->lastOrientation = $item['orientation'];
+            } else if ($this->lastOrientation != $item['orientation']) {
+                $this->lastOrientation = $item['orientation'];
+                return "<br>" . Html::a(Html::img($src), $url, $options);
+            }
+        }
+        return Html::a(Html::img($src), $url, $options);
     }
 
     /**
@@ -148,7 +161,6 @@ class Gallery extends Widget
     {
         $view = $this->getView();
         GalleryAsset::register($view);
-        DosamigosAsset::register($view);
 
         $id = $this->options['id'];
         $options = Json::encode($this->clientOptions);
